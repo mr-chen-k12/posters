@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mr. Chen's Math Posters — Scan & Explore</title>
+<meta name="description" content="Printed math posters for 6th grade with QR codes that link to interactive explorations showing how math is useful in the real world." />
+<style>
+  :root{
+    --bg:#0f172a;        /* slate-900 */
+    --panel:#111827;     /* gray-900 */
+    --ink:#e5e7eb;       /* gray-200 */
+    --muted:#94a3b8;     /* slate-400 */
+    --brand:#38bdf8;     /* sky-400 */
+    --accent:#22c55e;    /* green-500 */
+    --warn:#f59e0b;      /* amber-500 */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 800px at 10% -10%, #1f2937 0%, var(--bg) 40%, #0b1226 100%);
+    line-height:1.55;
+  }
+  a{color:var(--brand); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px}
+  header{
+    padding:32px 0 8px;
+  }
+  h1{margin:0;font-size:clamp(1.6rem,1.1rem + 2.6vw,2.8rem)}
+  .tag{display:inline-block;margin-top:10px;color:#cbd5e1}
+  .hero{
+    margin-top:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:18px;
+  }
+  .grid{
+    display:grid; gap:16px; grid-template-columns:1fr;
+  }
+  @media (min-width:850px){ .grid{grid-template-columns:repeat(3,1fr)} }
+  .card{
+    border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:10px;
+  }
+  .pill{display:inline-block; font-size:.78rem; padding:3px 8px; border-radius:999px;
+        border:1px solid rgba(255,255,255,.14); color:#e2e8f0; background:rgba(255,255,255,.05)}
+  .btn{
+    display:inline-block; padding:10px 14px; border-radius:12px; border:none; cursor:pointer;
+    background:linear-gradient(180deg, #2563eb, #1d4ed8); color:white; font-weight:700;
+    box-shadow:0 10px 20px rgba(37,99,235,.25), inset 0 1px 0 rgba(255,255,255,.2);
+    text-align:center
+  }
+  .btn.secondary{ background:linear-gradient(180deg, #059669, #047857) }
+  .muted{color:var(--muted)}
+  .how{
+    display:grid; gap:12px; grid-template-columns:1fr;
+    margin-top:18px
+  }
+  @media (min-width:850px){ .how{grid-template-columns:repeat(3,1fr)} }
+  .how .step{background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px}
+  footer{margin:28px 0 10px; color:#9ca3af}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Math Posters — Scan & Explore</h1>
+      <div class="tag">Real-world math for 6th graders • Printed posters with QR codes that launch interactive explorations</div>
+      <div class="hero">
+        <p><strong>Why this project?</strong> I wanted students to see that math is not just worksheets — it’s a tool we use to make sense of the world. Each classroom poster highlights a concept (ratios, scaling, geometry, data, etc.) and includes a QR code. When students scan the code, they jump into a short interactive that lets them test ideas, change values, and see the math <em>do</em> something.</p>
+        <p class="muted">Posters are designed to motivate curiosity first, then connect to grade-level standards through hands-on exploration.</p>
+        <div class="how">
+          <div class="step">
+            <span class="pill">1 · Pick</span>
+            <p>Choose a poster concept below.</p>
+          </div>
+          <div class="step">
+            <span class="pill">2 · Print</span>
+            <p>Print the poster and stick the QR code below it.</p>
+          </div>
+          <div class="step">
+            <span class="pill">3 · Scan</span>
+            <p>Students scan the code to open the matching interactive and explore the idea.</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <h2 style="margin-top:24px">Interactives</h2>
+    <div class="grid" aria-label="Poster list">
+      <!-- Card 1: Fractal Explorer -->
+      <article class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px">
+          <h3 style="margin:0">Fractal Explorer</h3>
+          <span class="pill">Patterns · Scaling</span>
+        </div>
+        <p class="muted" style="margin:0">
+          Explore self-similar patterns and scale factor using a simple fractal generator.
+          Connects to ideas of geometry, repetition, and structure (ferns, Romanesco, coastlines).
+        </p>
+        <div style="display:flex; gap:10px; margin-top:auto">
+          <a class="btn" href="./fractal.html">Open interactive</a>
+          <a class="btn secondary" href="./fractal.html" target="_blank" rel="noopener">Link for QR</a>
+        </div>
+      </article>
+
+      <!-- Example placeholders for future posters (safe to leave in or remove) -->
+      <article class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px">
+          <h3 style="margin:0">Unit Rate: Snack Shop</h3>
+          <span class="pill">Ratios · Percents</span>
+        </div>
+        <p class="muted" style="margin:0">
+          Compare prices, sizes, discounts, and tax to decide which deal is better. (Coming soon)
+        </p>
+        <div style="display:flex; gap:10px; margin-top:auto">
+          <span class="btn" style="opacity:.5; pointer-events:none">Coming soon</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px">
+          <h3 style="margin:0">Map Scale & Travel Time</h3>
+          <span class="pill">Ratios · Rates</span>
+        </div>
+        <p class="muted" style="margin:0">
+          Convert inches on a map to miles and estimate time with speed sliders. (Coming soon)
+        </p>
+        <div style="display:flex; gap:10px; margin-top:auto">
+          <span class="btn" style="opacity:.5; pointer-events:none">Coming soon</span>
+        </div>
+      </article>
+    </div>
+
+    <h2 style="margin-top:28px">Printing & QR Tips</h2>
+    <div class="hero">
+      <ul>
+        <li>Use any free QR generator with the interactive link (e.g., <code>https://mr-chen-k12.github.io/posters/fractal.html</code>).</li>
+        <li>Place the QR code <em>below</em> the poster title with a short prompt (e.g., “Scan to explore!”).</li>
+        <li>Recommended sizes: 18×24″ or 24×36″ posters; QR code at least 1.2–1.6″ square for easy scanning across the room.</li>
+        <li>Accessibility: include a short URL under the QR for students without a camera.</li>
+      </ul>
+    </div>
+
+    <footer>
+      © <span id="year"></span> Mr. Chen • Built to help 6th graders see the usefulness of math in everyday life.
+    </footer>
+  </div>
+
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
