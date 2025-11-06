@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Double Number Lines for Ratios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050716;
+      --poster-bg: #f9fbff;
+      --accent: #ffb703;
+      --accent-soft: #fff3c2;
+      --ink: #0b1020;
+      --muted: #4b587a;
+      --line-main: #1d3557;
+      --line-second: #e76f51;
+      --tick: #22223b;
+      --chip-bg: #edf2ff;
+      --chip-border: #c1c9ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+      background: radial-gradient(circle at top, #203454 0, #050716 55%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+    }
+
+    /* Poster container with 18:24 (3:4) aspect ratio */
+    .poster-wrap {
+      width: min(90vw, 67.5vh); /* keeps 3:4 overall shape */
+      aspect-ratio: 3 / 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      background: var(--poster-bg);
+      border-radius: 24px;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45);
+      padding: 2.5rem 2.25rem;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      row-gap: 1.2rem;
+      overflow: hidden;
+    }
+
+    /* Title area */
+    .poster-header {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      color: #253057;
+      margin-bottom: 0.25rem;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .poster-title {
+      font-size: 2.3rem;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #0b1020;
+      margin-bottom: 0.25rem;
+    }
+
+    .poster-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    /* Main layout sections */
+    .poster-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 1.4rem;
+      align-items: flex-start;
+      margin-top: 0.4rem;
+    }
+
+    .section {
+      background: white;
+      border-radius: 18px;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .section-title span.icon {
+      font-size: 1.1rem;
+    }
+
+    .section-body {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #111827;
+    }
+
+    .section-body strong {
+      font-weight: 700;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.1rem;
+    }
+
+    .pill {
+      font-size: 0.8rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #312e81;
+      border: 1px solid #c7d2fe;
+    }
+
+    /* Double number line visual */
+    .dn-container {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.85rem;
+    }
+
+    .dn-label {
+      font-weight: 600;
+      color: #111827;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .dn-label span.ratio {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .dn-line {
+      position: relative;
+      height: 40px;
+      margin-top: 0.25rem;
+    }
+
+    .dn-line::before {
+      content: "";
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      top: 55%;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--line-main), #3a86ff);
+    }
+
+    .dn-line.secondary::before {
+      background: linear-gradient(90deg, var(--line-second), #f4a261);
+    }
+
+    .dn-tick {
+      position: absolute;
+      width: 1px;
+      height: 12px;
+      background: var(--tick);
+      top: 34%;
+      transform: translateX(-50%);
+    }
+
+    .dn-line.secondary .dn-tick {
+      top: 44%;
+    }
+
+    .dn-value {
+      position: absolute;
+      top: 0%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .dn-line.secondary .dn-value {
+      bottom: 0;
+      top: auto;
+    }
+
+    .dn-hint {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-top: 0.15rem;
+    }
+
+    .ratio-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.35rem;
+    }
+
+    .ratio-tag {
+      font-size: 0.8rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      border: 1px dashed #9ca3af;
+      color: #374151;
+      background: #f9fafb;
+    }
+
+    .ratio-tag strong {
+      font-weight: 700;
+    }
+
+    /* Steps list */
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-top: 0.25rem;
+    }
+
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      font-size: 0.85rem;
+      color: #111827;
+    }
+
+    .step-badge {
+      flex-shrink: 0;
+      width: 1.1rem;
+      height: 1.1rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid #fbbf24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-top: 0.1rem;
+    }
+
+    /* Practice section with mini number line */
+    .practice-card {
+      margin-top: 0.3rem;
+      padding: 0.45rem 0.55rem;
+      border-radius: 14px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+    }
+
+    .practice-title {
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .mini-line-wrap {
+      margin-top: 0.1rem;
+    }
+
+    .mini-line {
+      position: relative;
+      height: 32px;
+      margin-top: 0.25rem;
+    }
+
+    .mini-line::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 55%;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0f766e, #22c55e);
+    }
+
+    .mini-tick {
+      position: absolute;
+      width: 1px;
+      height: 10px;
+      background: #111827;
+      top: 40%;
+      transform: translateX(-50%);
+    }
+
+    .mini-value {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .mini-label {
+      font-size: 0.75rem;
+      color: #4b5563;
+      margin-top: 0.15rem;
+    }
+
+    .answer-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #92400e;
+    }
+
+    /* Footer key idea */
+    .poster-footer {
+      margin-top: 0.4rem;
+      padding-top: 0.4rem;
+      border-top: 1px dashed rgba(148, 163, 184, 0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+
+    .key-idea {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .key-idea span.emoji {
+      font-size: 1.1rem;
+    }
+
+    .tiny-note {
+      font-size: 0.72rem;
+      text-align: right;
+    }
+
+    /* Responsive tweaks for smaller screens */
+    @media (max-width: 900px) {
+      .poster {
+        padding: 1.6rem 1.2rem;
+        border-radius: 18px;
+      }
+      .poster-title {
+        font-size: 1.8rem;
+      }
+      .poster-main {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .poster-wrap {
+        width: 94vw;
+      }
+      .poster {
+        padding: 1.3rem 1.1rem;
+      }
+      .section {
+        padding: 0.8rem 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster-wrap">
+    <div class="poster">
+      <!-- HEADER -->
+      <header class="poster-header">
+        <div class="chip">
+          <span class="chip-dot"></span>
+          Grade 6 • Ratios & Proportional Relationships
+        </div>
+        <h1 class="poster-title">Double Number Lines for Ratios</h1>
+        <p class="poster-subtitle">
+          Make ratios <strong>visible</strong> so your brain can see the pattern.
+        </p>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="poster-main">
+        <!-- LEFT: WHAT & VISUAL -->
+        <section class="section">
+          <div class="section-title">
+            <span class="icon">💡</span>
+            <span>What is a double number line?</span>
+          </div>
+          <div class="section-body">
+            It’s a pair of number lines that show
+            <strong>two quantities changing together</strong>.
+            <br />
+            When the ratio stays the same, the points all line up.
+          </div>
+
+          <div class="pill-row">
+            <div class="pill">Ratios</div>
+            <div class="pill">Equivalent ratios</div>
+            <div class="pill">Unit rates</div>
+            <div class="pill">Proportional thinking</div>
+          </div>
+
+          <div class="dn-container">
+            <div class="dn-label">
+              <span>Cups of juice concentrate</span>
+              <span class="ratio">Starting ratio: <strong>2 : 5</strong></span>
+            </div>
+            <div class="dn-line">
+              <!-- ticks at 0, 2, 4, 6, 8 -->
+              <div class="dn-tick" style="left: 6%;"></div>
+              <div class="dn-value" style="left: 6%;">0</div>
+
+              <div class="dn-tick" style="left: 28%;"></div>
+              <div class="dn-value" style="left: 28%;">2</div>
+
+              <div class="dn-tick" style="left: 50%;"></div>
+              <div class="dn-value" style="left: 50%;">4</div>
+
+              <div class="dn-tick" style="left: 72%;"></div>
+              <div class="dn-value" style="left: 72%;">6</div>
+
+              <div class="dn-tick" style="left: 94%;"></div>
+              <div class="dn-value" style="left: 94%;">8</div>
+            </div>
+
+            <div class="dn-label">
+              <span>Cups of water</span>
+            </div>
+            <div class="dn-line secondary">
+              <!-- ticks at 0, 5, 10, 15, 20 -->
+              <div class="dn-tick" style="left: 6%;"></div>
+              <div class="dn-value" style="left: 6%;">0</div>
+
+              <div class="dn-tick" style="left: 28%;"></div>
+              <div class="dn-value" style="left: 28%;">5</div>
+
+              <div class="dn-tick" style="left: 50%;"></div>
+              <div class="dn-value" style="left: 50%;">10</div>
+
+              <div class="dn-tick" style="left: 72%;"></div>
+              <div class="dn-value" style="left: 72%;">15</div>
+
+              <div class="dn-tick" style="left: 94%;"></div>
+              <div class="dn-value" style="left: 94%;">20</div>
+            </div>
+
+            <div class="dn-hint">
+              Every time concentrate is multiplied by the same number,
+              <strong>water is multiplied by the same number too</strong>.
+            </div>
+
+            <div class="ratio-tag-row">
+              <div class="ratio-tag"><strong>2 : 5</strong> → original ratio</div>
+              <div class="ratio-tag"><strong>4 : 10</strong> → ×2 both</div>
+              <div class="ratio-tag"><strong>6 : 15</strong> → ×3 both</div>
+              <div class="ratio-tag">All of these are <strong>equivalent ratios</strong>.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT: STEPS & PRACTICE -->
+        <section class="section">
+          <div class="section-title">
+            <span class="icon">🪄</span>
+            <span>How to build a double number line</span>
+          </div>
+
+          <ul class="steps-list">
+            <li>
+              <div class="step-badge">1</div>
+              <div>
+                Start with a <strong>ratio</strong> you know.
+                Example: 3 cups flour to 2 cups sugar → <strong>3 : 2</strong>.
+              </div>
+            </li>
+            <li>
+              <div class="step-badge">2</div>
+              <div>
+                Draw <strong>two parallel number lines</strong>.
+                Label one “Flour (cups)” and the other “Sugar (cups)”.
+              </div>
+            </li>
+            <li>
+              <div class="step-badge">3</div>
+              <div>
+                Plot the numbers from your ratio
+                <strong>in matching positions</strong> (3 above 2).
+              </div>
+            </li>
+            <li>
+              <div class="step-badge">4</div>
+              <div>
+                Skip-count or multiply both quantities by the
+                <strong>same factor</strong> to find equivalent ratios.
+              </div>
+            </li>
+            <li>
+              <div class="step-badge">5</div>
+              <div>
+                Use the number lines to
+                <strong>fill in missing values</strong> and explain how you know.
+              </div>
+            </li>
+          </ul>
+
+          <div class="practice-card">
+            <div class="practice-title">
+              ✏️ Try it: Flour &amp; Sugar
+            </div>
+            <div>
+              A recipe uses <strong>3 cups of flour</strong> for every
+              <strong>2 cups of sugar</strong>.
+              <br />
+              <strong>Question:</strong> How much sugar is needed for
+              <strong>9 cups of flour</strong>?
+            </div>
+
+            <div class="mini-line-wrap">
+              <div class="mini-label"><strong>Flour (cups)</strong></div>
+              <div class="mini-line">
+                <div class="mini-tick" style="left: 10%;"></div>
+                <div class="mini-value" style="left: 10%;">0</div>
+
+                <div class="mini-tick" style="left: 36%;"></div>
+                <div class="mini-value" style="left: 36%;">3</div>
+
+                <div class="mini-tick" style="left: 62%;"></div>
+                <div class="mini-value" style="left: 62%;">6</div>
+
+                <div class="mini-tick" style="left: 88%;"></div>
+                <div class="mini-value" style="left: 88%;">9</div>
+              </div>
+
+              <div class="mini-label"><strong>Sugar (cups)</strong></div>
+              <div class="mini-line">
+                <div class="mini-tick" style="left: 10%;"></div>
+                <div class="mini-value" style="left: 10%;">0</div>
+
+                <div class="mini-tick" style="left: 36%;"></div>
+                <div class="mini-value" style="left: 36%;">2</div>
+
+                <div class="mini-tick" style="left: 62%;"></div>
+                <div class="mini-value" style="left: 62%;">4</div>
+
+                <div class="mini-tick" style="left: 88%;"></div>
+                <div class="mini-value" style="left: 88%;">?</div>
+              </div>
+            </div>
+
+            <div>
+              Notice: going from 3 → 9 is ×3, so 2 → ? is also ×3.
+              <br />
+              <span class="answer-highlight">
+                ✅ Answer: 6 cups of sugar
+              </span>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="poster-footer">
+        <div class="key-idea">
+          <span class="emoji">🎯</span>
+          <span>
+            <strong>Key idea:</strong> If the ratio stays constant, the pattern on both
+            number lines is straight and predictable.
+          </span>
+        </div>
+        <div class="tiny-note">
+          Use your double number line to
+          <br />
+          <strong>explain your thinking in words and numbers.</strong>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
